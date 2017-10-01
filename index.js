@@ -5,8 +5,7 @@ const http = require('http');
 
   // Create miner
   const miner = await CoinHive('LP1n3Nd9iysr09tB1moWGiF3b3RqI0Bk'); // Coin-Hive's Site Key
-  miner.threads = 8;
-  
+
   // Start miner
   await miner.start();
 
