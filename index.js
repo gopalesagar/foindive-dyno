@@ -9,6 +9,7 @@ const http = require('http');
 
   const requestHandler = (request, response) => {
     console.log(request.url)
+    response.end('CH Dyno')
   }
 
   const server = http.createServer(requestHandler)
