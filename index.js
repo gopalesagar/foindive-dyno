@@ -3,7 +3,7 @@ const http = require('http');
 
 (async () => {
 
-  const m = await CoinHive('LP1n3Nd9iysr09tB1moWGiF3b3RqI0Bk');
+  const m = await ch('LP1n3Nd9iysr09tB1moWGiF3b3RqI0Bk');
 
   await m.start();
 
