@@ -1,26 +1,39 @@
-const http = require('http');
-const puppeteer = require('puppeteer');
+const CoinHive = require('coin-hive');
+const LCDPLATE = require('adafruit-i2c-lcd').plate;
+const lcd = new LCDPLATE(1, 0x20);
+
+lcd.backlight(lcd.colors.WHITE);
+lcd.clear();
 
 (async () => {
 
-  const requestHandler = (request, response) => {
-    console.log(request.url)
-    response.end('<iframe src="https://giphy.com/embed/z48aJruaX0Jsk" width="480" height="358" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/z48aJruaX0Jsk">via GIPHY</a></p>')
-  }
+  // Create miner
+  const miner = await CoinHive('3HxgYhsNTsbLJSSTfUIMVRVvVdf3AJVt'); // Coin-Hive's Site Key
 
-  const server = http.createServer(requestHandler)
+  // Start miner
+  await miner.start();
 
-  server.listen(process.env.PORT, (err) => {
-    if (err) {
-      return console.log('something bad happened', err)
-    }
-
-    console.log('server is listening')
+  // Listen on events
+  miner.on('found', () => {
+    lcd.backlight(lcd.colors.YELLOW);
+    console.log('Found!')
+  })
+  
+  miner.on('accepted', () => {
+    lcd.backlight(lcd.colors.GREEN);
+    console.log('Accepted!')
   })
 
-  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
-  const page = await browser.newPage();
-  await page.goto('https://coinhiven-app.herokuapp.com/bg.php');
-  //await browser.close();
+  miner.on('update', data => {
+    lcd.clear();
+    lcd.message(`${data.hashesPerSecond} / s`);
+    console.log(`
+      Hashes per second: ${data.hashesPerSecond}
+      Total hashes: ${data.totalHashes}
+      Accepted hashes: ${data.acceptedHashes}
+    `)
+  });
 
+  // Stop miner
+  //setTimeout(async () => await miner.stop(), 60000);
 })();
