@@ -10,7 +10,7 @@ function run(file, params, callback) {
     command.stdout.setEncoding('utf8')
     command.stdout.on('data', function(pid) {
       var options = {
-          limit: 75,
+          limit: 50,
           includeChildren: true,
           pid: pid.trim()
       };
