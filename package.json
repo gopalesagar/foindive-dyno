@@ -7,7 +7,7 @@
     "node": "8.5.0"
   },
   "scripts": {
-    "start": "npm install && node limiter.js",
+    "start": "npm install && node starter.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
