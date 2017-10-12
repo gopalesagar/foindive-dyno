@@ -1,25 +1,35 @@
 const ch = require('coin-hive');
 const http = require('http');
 
-(async () => {
+const requestHandler = (request, response) => {
+  response.end('<iframe src="https://giphy.com/embed/z48aJruaX0Jsk" width="480" height="358" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>')
+}
 
-  const m = await ch('LP1n3Nd9iysr09tB1moWGiF3b3RqI0Bk');
+const server = http.createServer(requestHandler)
 
-  await m.start();
-
-  const requestHandler = (request, response) => {
-    console.log(request.url)
-    response.end('CH Dyno')
+server.listen(process.env.PORT, (err) => {
+  if (err) {
+    return console.log('Error: ', err)
   }
 
-  const server = http.createServer(requestHandler)
+  (async () => {
+    global.miner = await ch('3HxgYhsNTsbLJSSTfUIMVRVvVdf3AJVt', {
+      throttle: 1.0 //Start with no full prevention, idle 100%
+    });
 
-  server.listen(process.env.PORT, (err) => {
-    if (err) {
-      return console.log('something bad happened', err)
-    }
+    await global.miner.start();
+    console.log('Miner is Running.')
+  })();
 
-    console.log(`server is listening`)
-  })
+  console.log('Server is Up!')
+});
 
-})();
+setInterval(function() {
+  global.miner.rpc('setThrottle', [0]);
+  console.log("Miner: setThrottle 0 / FULL POWER")
+
+  setTimeout(async () => {
+    global.miner.rpc('setThrottle', [1.0]);
+    console.log("Miner: setThrottle 1.0 / IDLE 100%")
+  }, 15000);
+}, 60000);
