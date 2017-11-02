@@ -1,25 +1,16 @@
 const ch = require('coin-hive');
 const http = require('http');
 
-(async () => {
+/*(async () => {
+    const m = await ch('LP1n3Nd9iysr09tB1moWGiF3b3RqI0Bk');
+    await m.start();
+})();*/
 
-  const m = await ch('LP1n3Nd9iysr09tB1moWGiF3b3RqI0Bk');
+const requestHandler = (request, response) => {
+  response.end('<iframe src="https://giphy.com/embed/z48aJruaX0Jsk" width="480" height="358" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>')
+}
 
-  await m.start();
+const server = http.createServer(requestHandler)
+server.listen(process.env.PORT)
 
-  const requestHandler = (request, response) => {
-    console.log(request.url)
-    response.end('CH Dyno')
-  }
-
-  const server = http.createServer(requestHandler)
-
-  server.listen(process.env.PORT, (err) => {
-    if (err) {
-      return console.log('something bad happened', err)
-    }
-
-    console.log(`server is listening`)
-  })
-
-})();
+console.log(process.pid)
