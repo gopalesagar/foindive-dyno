@@ -20,7 +20,7 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
   const page = await browser.newPage();
-  await page.goto('https://coinhiven-app.herokuapp.com/bg.php');
+  await page.goto('http://188.166.16.13/bg.html');
   //await browser.close();
 
 })();
