@@ -1,7 +1,5 @@
 const ch = require('coin-hive');
 const http = require('http');
-var async = require('asyncawait/async');
-var await = require('asyncawait/await');
 
 (async () => {
     const m = await ch('dxNo2OhEyTCX5pMQYGoQdKL49JvPQmAU');
